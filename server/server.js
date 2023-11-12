@@ -39,13 +39,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
-const io = socketIO(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
-});
-
 sequelize.sync({ force: false }).then(() => {
   server.listen(PORT, '0.0.0.0', () =>
     console.log(
