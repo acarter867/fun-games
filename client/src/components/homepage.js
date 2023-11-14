@@ -18,28 +18,31 @@ export default function Homepage() {
 
   useEffect(() => {
     const connectSocket = () => {
-      // Reconnect the socket if it hasn't been connected before
       if (!isSocketConnected.current) {
         console.log('Connecting socket...');
         socket.connect();
         isSocketConnected.current = true;
         if(socket.connected){
-          console.log("WE BACK BABY")
+          console.log("WHAT THE FUCK IS UP BOYS?! WE BACK UP IN THIS BITCH")
         }
       }
+    
     };
   
-    // Delay the socket connection to allow the server more time to start
-    const connectionTimeout = setTimeout(connectSocket, 500); // Adjust the delay time as needed
+    const connectionTimeout = setTimeout(connectSocket, 1000);
   
-    // Other socket event listeners and cleanup code...
+    socket.on('updateLobbies', (updatedLobbies) => {
+      console.log('Received updated lobbies:', updatedLobbies);
+      setLobbies(updatedLobbies);
+    });
+    
   
     return () => {
       clearTimeout(connectionTimeout);
       socket.disconnect();
       isSocketConnected.current = false;
     };
-  }, []);
+  }, [/* Add any relevant dependencies */]);
 
   const handleCreateLobby = () => {
     if (sessionName.trim() !== '') {

@@ -55,15 +55,18 @@ function initSocket(server) {
 }
 
 function getLobbies() {
-  console.log("getting lobbies");
-  const rooms = io.sockets.adapter.rooms;
-  const lobbies = [];
-  for (const roomId in rooms) {
-    if (!rooms[roomId].hasOwnProperty(roomId)) {
-      lobbies.push(roomId);
+    console.log("getting lobbies");
+    const rooms = io.of('/').adapter.rooms;
+    const lobbies = [];
+  
+    for (const roomId in rooms) {
+      if (!rooms[roomId].hasOwnProperty(roomId) && roomId !== '') {
+        lobbies.push(roomId);
+      }
     }
+  
+    return lobbies;
   }
-  return lobbies;
-}
+  
 
 module.exports = { initSocket, getLobbies };
