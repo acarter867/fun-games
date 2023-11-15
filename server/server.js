@@ -13,7 +13,10 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Initialize the server
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
+
+//initialize socket
+socketManager.initSocket(httpServer)
 
 // Initialize session store
 const sess = {
@@ -26,9 +29,7 @@ const sess = {
   }),
 };
 
-// Initialize socket.io
-socketManager.initSocket(server);
-
+app.use(session(sess));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -40,7 +41,7 @@ app.get('/', (req, res) => {
 });
 
 sequelize.sync({ force: false }).then(() => {
-  server.listen(PORT, '0.0.0.0', () =>
+  httpServer.listen(PORT, '0.0.0.0', () =>
     console.log(
       `\nServer running on port ${PORT}. Visit http://localhost:${PORT} and create an account!`
     )
